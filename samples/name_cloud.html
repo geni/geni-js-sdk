@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<script src="http://geni.com/jsdk.js"></script>
+</head>
+
+<body>
+	<script>
+		// ******************************************************************************************
+		// Initialize GENI JS Client SDK
+		// ******************************************************************************************
+    Geni.init({
+        app_id:  'PROVIDE YOUR APP KEY HERE',
+        cookie:  false,                    
+        logging: false                    
+    });
+
+		// ******************************************************************************************
+		// Helper methods 
+		// ******************************************************************************************
+		function $(id) {
+			return document.getElementById(id);
+		}
+		
+		// ******************************************************************************************
+		// Connection methods 
+		// ******************************************************************************************
+   	function connectWithGeni() {
+			Geni.connect(function(response) {
+        if(response.status == 'authorized') {
+						$("login_link").style.display = "none";	
+						$("loading").style.display = "";	
+						loadNameCloud();
+        } else {
+						$("login_link").style.display = "";	
+        }
+			});
+		 }	
+
+		// ******************************************************************************************
+		// Generation methods 
+		// ******************************************************************************************
+		var name_counts = {};
+		function generateNames() {
+			html = [];
+			var names = Object.keys(name_counts);
+			var total_count = 0;
+			for (var i=0; i<names.length; i++) {
+				var name = names[i];
+				total_count = total_count + name_counts[name];
+				var font_size = 10 + (name_counts[name]*5);
+				var title = name_counts[name] + (name_counts[name] == 1 ? " member of your family has this first name" : " members of your family have this first name");
+				html.push("<span style='padding:5px;color:#666;font-size:" + font_size + "px;' title='" + title + "'>" + name + "</span>");
+			}
+			
+			var summary = "<div style='padding:20px;'>Your family has " + total_count + " members. The following name cloud shows your family first name distribution.</div> ";
+			
+			$("name_cloud").innerHTML = summary + html.join(" ");
+			$("loading").style.display = "none";	
+		}
+		
+		// ******************************************************************************************
+		// Load family methods 
+		// ******************************************************************************************
+		function loadNameCloud(url) {
+			if (!url) { url = '/user/max-family'; }
+			url = url.replace("https://www.geni.com/api", "");
+			
+			Geni.api(url, function (response) {
+				for (var i=0; i<response.results.length; i++) {
+					var profile = response.results[i];
+					var name = profile.first_name;
+
+					if (!name_counts[name]) {
+							name_counts[name] = 0;
+					}
+					name_counts[name] = name_counts[name] + 1;
+				}
+				if (response.next_page) {
+					loadNameCloud(response.next_page);
+				} else {
+					generateNames();
+				}
+			});			
+		}
+	</script>
+	
+	<div style="text-align:center; padding:30px; font-size:24px;">
+		<div id="login_link">
+			<a href="#" onClick="connectWithGeni()">Connect with Geni and see your family first name distribution.</a>
+		</div>	
+
+		<div id="loading" style="display:none;">
+			<img src="spinner.gif" style="height:24px;vertical-align:bottom;padding-right:15px;"> Counting first names...
+		</div>	
+		
+		<div id="name_cloud">
+		</div>	
+	</div>
+	
+</body>
+
+</html>
