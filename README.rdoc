@@ -59,7 +59,7 @@ The Geni.getStatus() method will make a request to Geni to obtain the current st
 If the status is 'authorized', an access token will be returned which can then be used to start making API calls. If the status is either 'unauthorized' or 'unknown', your application will need to prompt the user to login and/or authorize by calling Geni.connect().
 
   Geni.connect(function(response) {
-    if(response.status == 'authorized')) {
+    if(response.status == 'authorized') {
       // User is logged in and has authorized your application.
       // You can now make authorized calls to the API.
     } else {
