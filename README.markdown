@@ -12,8 +12,8 @@ provides robust functionality for working with Oauth 2.0 authentication.
 # Getting Started
 
 To get started, you'll need to add the library to your page, and initialize
-your app by calling Geni.init(), passing in your application key. The best
-place to put this is at the bottom of your page, before the closing </body>
+your app by calling `Geni.init()`, passing in your application key. The best
+place to put this is at the bottom of your page, before the closing `</body>`
 tag to prohibit blocking parallel downloads as described in Yahoo's best
 practices.
 
@@ -24,7 +24,7 @@ practices.
       });
     </script>
 
-In addition to app_id, Geni.init() has a few optional parameters.
+In addition to `app_id`, `Geni.init()` has a few optional parameters.
 
     <script src="http://geni.com/jsdk.js"></script>
     <script>
@@ -48,7 +48,7 @@ behalf of that user.
 
 To authenticate a user via the Javascript SDK you'll need to figure out
 whether the user is logged in and whether that user has already authorized
-your application. To do this we can use Geni.getStatus().
+your application. To do this we can use `Geni.getStatus()`.
 
     Geni.getStatus(function(response) {
       if (response.status == 'authorized') {
@@ -59,7 +59,7 @@ your application. To do this we can use Geni.getStatus().
       }
     });
 
-The Geni.getStatus() method will make a request to Geni to obtain the current
+The `Geni.getStatus()` method will make a request to Geni to obtain the current
 status of the user. The request will respond with one of three status types:
 
 "authorized" - the user is logged in to Geni and has authorized your
@@ -71,7 +71,7 @@ authorized your application "unknown" - the user is logged out of Geni
 If the status is 'authorized', an access token will be returned which can then
 be used to start making API calls. If the status is either 'unauthorized' or
 'unknown', your application will need to prompt the user to login and/or
-authorize by calling Geni.connect().
+authorize by calling `Geni.connect()`.
 
     Geni.connect(function(response) {
       if(response.status == 'authorized') {
@@ -82,11 +82,11 @@ authorize by calling Geni.connect().
       }
     });
 
-Geni.connect() will open a small popup window to the Geni.com site, prompting
+`Geni.connect()` will open a small popup window to the Geni.com site, prompting
 the user to login and authorize your application. The popup will close
 immediately after authorization is either allowed or disallowed.
 
-Just like the Geni.getStatus() method, Geni.connect() returns user status and
+Just like the `Geni.getStatus()` method, `Geni.connect()` returns user status and
 an access token if the user authorizes the application. Note: Because calling
 this method opens a popup window to the Geni.com site, it should only be
 called on a user action like a click on a button or link, as most browsers
@@ -104,7 +104,7 @@ this the Javascript SDK offers the logout() method.
 
 # Status Change Events
 
-The Javascript SDK also provides an 'auth:statusChange' event that can be
+The Javascript SDK also provides an `'auth:statusChange'` event that can be
 subscribed to. The event fires when the user's status changes as the result of
 calling one of these methods.
 
@@ -113,13 +113,13 @@ calling one of these methods.
     });
 
 Similar to jQuery, you can subscribe/unsubscribe from events using bind
-(Geni.Event.bind) and unbind (Geni.Event.unbind).
+(`Geni.Event.bind`) and unbind (`Geni.Event.unbind`).
 
 # Making API Calls
 
 Once you have an authenticated user, you are free to make calls to the Geni
 API. With the Javascript SDK, developers get full access to the API directly
-through the user's browser via the Geni.api() method.
+through the user's browser via the `Geni.api()` method.
 
 The first argument is the path to the API method and it is the only required
 argument. IDs are embedded before the action so the urls read more like a
